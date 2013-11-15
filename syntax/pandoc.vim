@@ -344,5 +344,6 @@ hi link pandocNewLine Error
 
 let b:current_syntax = "pandoc"
 
+syntax sync clear
 syntax sync minlines=100
 
