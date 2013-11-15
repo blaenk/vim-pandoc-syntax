@@ -149,7 +149,8 @@ syn match pandocCodePre /<pre>.\{-}<\/pre>/ skipnl
 syn match pandocCodePre /<code>.\{-}<\/code>/ skipnl
 " }}}
 
-for s:lang in ['scala', 'haskell', 'cpp', 'ruby', 'python']
+setlocal isk+=_
+for s:lang in ['scala', 'haskell', 'cpp', 'ruby', 'python', 'cmake']
   let s:lang_name = s:lang
   let s:lang_syntax = s:lang
 
