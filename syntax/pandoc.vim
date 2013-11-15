@@ -174,21 +174,21 @@ syn match pandocCodePre /<code>.\{-}<\/code>/ skipnl
 let s:pandoc_enabled_codelangs = [
 	    \"cpp",
 	    \"haskell",
-	    \"scala",
 	    \"python",
 	    \"ruby"]
 if exists("g:pandoc_user_codelangs")
     let s:pandoc_enabled_codelangs = extend(s:pandoc_enabled_codelangs, g:pandoc_user_codelangs)
 endif
 
-"setlocal isk+=_
 for l in s:pandoc_enabled_codelangs
     unlet b:current_syntax
     exe 'syn include @'.toupper(l).' syntax/'.l.'.vim'
-    "exe 'syn region pandocDelimitedCodeBlock_'.l.' start=/\(^\z(\(\s\{4,}\)\=[`~]\{3,}[`~]*\).*'.l.'.*\n\)\@<=./'. \' skip=/\_$/ end=/$/ '.
-    exe 'syn region pandocDelimitedCodeBlock_'.l.' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).*'.l.'.*\n\)\@<=\_^/ end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ '.
-		\'skipnl keepend contained containedin=pandocDelimitedCodeBlock contains=@'.toupper(l)
-    "exe 'hi link pandocDelimitedCodeBlock_'.l.' pandocDelimitedCodeBlock'
+    exe "syn region pandocDelimitedCodeBlock_" . l . ' start=/^\z(\(\s\{4,}\)\=`\{3,}`*\)\s*' . l . '/ end=/\z1`*/ skipnl contains=pandocDelimitedCodeBlockStart_' . l . ' keepend'
+    exe "syn region pandocDelimitedCodeBlock_" . l . ' start=/^\z(\(\s\{4,}\)\=\~\{3,}\~*\)\s*{\(.\+\s\)\?\.' . l . '\(.\+\)\?}/ end=/\z1\~*/ skipnl contains=pandocDelimitedCodeBlockStart_' . l . ' keepend'
+    exe "syn match pandocDelimitedCodeBlockStart_" . l . ' /\(\_^\n\_^\(\s\{4,}\)\=\)\@<=\(\~\{3,}\~*\|`\{3,}`*\)/ contained nextgroup=pandocDelimitedCodeBlockLanguage conceal cchar=λ'
+    exe "syn region panodcDelimitedCodeBlockCode_" . l . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).\+\n\)\@<=\_^/ end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ skipnl keepend containedin=pandocDelimitedCodeBlock_' . l . ' contains=@' . toupper(l)
+    exe "syn match pandocDelimitedCodeBlockEnd_" . l . ' /\(`\{3,}`*\|\~\{3,}\~*\)\(\_$\n\_$\)\@=/ containedin=pandocDelimitedCodeBlock_' . l . ' conceal'
+    exe 'hi link pandocDelimitedCodeBlock_'.l.' pandocDelimitedCodeBlock'
 endfor
 " }}}
 
