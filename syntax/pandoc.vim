@@ -184,7 +184,7 @@ setlocal isk+=_
 for l in s:pandoc_enabled_codelangs
     unlet b:current_syntax
     exe 'syn include @'.toupper(l).' syntax/'.l.'.vim'
-    exe 'syn region pandocDelimitedCodeBlock_'.l.' start=/\(^\z(\(\s\{4,}\)\=`\{3,}`*\).*'.l.'.*\n\)\@<=./ end=/\n\(\(`\{3,}`*\|\~\{3,}\~*\)\(\_$\n\_$\)\@=\)\@=/ skipnl contained containedin=pandocDelimitedCodeBlock contains=@'.toupper(l)
+    exe 'syn region pandocDelimitedCodeBlock_'.l.' start=/\(^\z(\(\s\{4,}\)\=\(\~\{3,}\~*\|`\{3,}`*\)\).*'.l.'.*\n\)\@<=./ end=/\n\(\(`\{3,}`*\|\~\{3,}\~*\)\(\_$\n\_$\)\@=\)\@=/ skipnl contained containedin=pandocDelimitedCodeBlock contains=@'.toupper(l)
     exe 'hi link pandocDelimitedCodeBlock_'.l.' pandocDelimitedCodeBlock'
 endfor
 " }}}
