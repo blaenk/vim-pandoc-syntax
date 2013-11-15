@@ -149,17 +149,20 @@ syn match pandocCodePre /<pre>.\{-}<\/pre>/ skipnl
 syn match pandocCodePre /<code>.\{-}<\/code>/ skipnl
 " }}}
 
-let s:lang_name = "cmake"
-let s:lang_syntax = "cmake"
+for s:lang in ['scala', 'haskell', 'cpp', 'ruby', 'python']
+  let s:lang_name = s:lang
+  let s:lang_syntax = s:lang
 
-unlet b:current_syntax
-exe "syn include @pandocDelimitedCodeBlock_" . s:lang_syntax . " syntax/" . s:lang_syntax . ".vim"
-exe "syn region pandocDelimitedCodeBlock_" . s:lang_syntax . ' start=/^\z(\(\s\{4,}\)\=`\{3,}`*\)\s*' . s:lang_name . '/ end=/\z1`*/ skipnl contains=pandocDelimitedCodeBlockStart_' . s:lang_syntax . ' keepend'
-exe "syn region pandocDelimitedCodeBlock_" . s:lang_syntax . ' start=/^\z(\(\s\{4,}\)\=\~\{3,}\~*\)\s*{\(.\+\s\)\?\.' . s:lang_name . '\(.\+\)\?}/ end=/\z1\~*/ skipnl contains=pandocDelimitedCodeBlockStart_' . s:lang_syntax . ' keepend'
-exe "syn match pandocDelimitedCodeBlockStart_" . s:lang_syntax . ' /\(\_^\n\_^\(\s\{4,}\)\=\)\@<=\(\~\{3,}\~*\|`\{3,}`*\)/ contained nextgroup=pandocDelimitedCodeBlockLanguage_' . s:lang_syntax . ' conceal cchar=λ'
-exe "syn match pandocDelimitedCodeBlockLanguage_" . s:lang_syntax . ' /\(\s\?\)\@<=.\+\_$\n/ contained'
-exe "syn region panodcDelimitedCodeBlockCode_" . s:lang_syntax . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).\+\n\)\@<=\_^/ end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ skipnl keepend containedin=pandocDelimitedCodeBlock_' . s:lang_syntax . ' contains=@pandocDelimitedCodeBlock_' . s:lang_syntax
-exe "syn match pandocDelimitedCodeBlockEnd_" . s:lang_syntax . ' /\(`\{3,}`*\|\~\{3,}\~*\)\(\_$\n\_$\)\@=/ containedin=pandocDelimitedCodeBlock_' . s:lang_syntax . ' conceal'
+  unlet b:current_syntax
+  exe "syn include @pandocDelimitedCodeBlock_" . s:lang_syntax . " syntax/" . s:lang_syntax . ".vim"
+  exe "syn region pandocDelimitedCodeBlock_" . s:lang_syntax . ' start=/^\z(\(\s\{4,}\)\=`\{3,}`*\)\s*' . s:lang_name . '/ end=/\z1`*/ skipnl contains=pandocDelimitedCodeBlockStart_' . s:lang_syntax . ' keepend'
+  exe "syn region pandocDelimitedCodeBlock_" . s:lang_syntax . ' start=/^\z(\(\s\{4,}\)\=\~\{3,}\~*\)\s*{\(.\+\s\)\?\.' . s:lang_name . '\(.\+\)\?}/ end=/\z1\~*/ skipnl contains=pandocDelimitedCodeBlockStart_' . s:lang_syntax . ' keepend'
+  exe "syn match pandocDelimitedCodeBlockStart_" . s:lang_syntax . ' /\(\_^\n\_^\(\s\{4,}\)\=\)\@<=\(\~\{3,}\~*\|`\{3,}`*\)/ contained nextgroup=pandocDelimitedCodeBlockLanguage_' . s:lang_syntax . ' conceal cchar=λ'
+  exe "syn match pandocDelimitedCodeBlockLanguage_" . s:lang_syntax . ' /\(\s\?\)\@<=.\+\_$\n/ contained'
+  exe "syn region panodcDelimitedCodeBlockCode_" . s:lang_syntax . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).\+\n\)\@<=\_^/ end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ skipnl keepend containedin=pandocDelimitedCodeBlock_' . s:lang_syntax . ' contains=@pandocDelimitedCodeBlock_' . s:lang_syntax
+  exe "syn match pandocDelimitedCodeBlockEnd_" . s:lang_syntax . ' /\(`\{3,}`*\|\~\{3,}\~*\)\(\_$\n\_$\)\@=/ containedin=pandocDelimitedCodeBlock_' . s:lang_syntax . ' conceal'
+endfor
+unlet! s:lang_name s:lang_syntax
 
 " Abbreviations: {{{1
 syn region pandocAbbreviationDefinition start=/^\*\[.\{-}\]:\s*/ end="$" contains=pandocNoFormatted,@Spell
