@@ -183,10 +183,8 @@ endif
 for l in s:pandoc_enabled_codelangs
     unlet b:current_syntax
     exe 'syn include @'.toupper(l).' syntax/'.l.'.vim'
-    exe "syn region pandocDelimitedCodeBlock_" . l . ' start=/^\z(\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\)\).*' . l . '/' .
-          \' end=/\z1`*/ skipnl contains=pandocDelimitedCodeBlockStart,pandocDelimitedCodeBlockEnd keepend'
-    exe "syn region panodcDelimitedCodeBlockCode_" . l . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).\+\n\)\@<=\_^/' .
-          \' end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ skipnl keepend containedin=pandocDelimitedCodeBlock_' . l .
+    exe "syn region panodcDelimitedCodeBlock_" . l . ' start=/\(\_^\(\s\{4,}\)\=\(`\{3,}`*\|\~\{3,}\~*\).*' . l . '.*\n\)\@<=\_^/' .
+          \' end=/\_$\n\(\(`\{3,}`*\|\~\{3,}\~*\)\_$\n\_$\)\@=/ contained containedin=pandocDelimitedCodeBlock' .
           \' contains=@' . toupper(l)
     exe 'hi link pandocDelimitedCodeBlock_'.l.' pandocDelimitedCodeBlock'
 endfor
